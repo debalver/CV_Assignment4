@@ -1,4 +1,5 @@
 import torch
+from torch import nn
 
 
 class BasicModel(torch.nn.Module):
@@ -20,10 +21,149 @@ class BasicModel(torch.nn.Module):
         self.output_channels = output_channels
         image_channels = cfg.MODEL.BACKBONE.INPUT_CHANNELS
         self.output_feature_size = cfg.MODEL.PRIORS.FEATURE_MAPS
+
+        # Create the backbone
+
+        self.first = nn.Sequential(
+
+            nn.Conv2d(
+                in_channels=image_channels,
+                out_channels=32,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=32,
+                out_channels=64,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=64,
+                out_channels=64,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=64,
+                out_channels=output_channels[0],
+                kernel_size=3,
+                stride=2,
+                padding=1
+            )
+        )
+
+        self.second = nn.Sequential(
+
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=output_channels[0],
+                out_channels=128,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=output_channels[1],
+                kernel_size=3,
+                stride=2,
+                padding=1
+            )
+        )
+
+        self.third = nn.Sequential(
+
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=output_channels[1],
+                out_channels=256,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=256,
+                out_channels=output_channels[2],
+                kernel_size=3,
+                stride=2,
+                padding=1
+            )
+        )
+
+        self.fourth = nn.Sequential(
+
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=output_channels[2],
+                out_channels=128,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=output_channels[3],
+                kernel_size=3,
+                stride=2,
+                padding=1
+            )
+        )
+
+        self.fifth = nn.Sequential(
+
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=output_channels[3],
+                out_channels=128,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=output_channels[4],
+                kernel_size=3,
+                stride=2,
+                padding=1
+            )
+        )
+
+        self.sixth = nn.Sequential(
+
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=output_channels[4],
+                out_channels=128,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=output_channels[5],
+                out_channels=128,
+                kernel_size=3,
+                stride=2,
+                padding=1
+            )
+        )
     
     def forward(self, x):
         """
-        The forward functiom should output features with shape:
+        The forward function should output features with shape:
             [shape(-1, output_channels[0], 38, 38),
             shape(-1, output_channels[1], 19, 19),
             shape(-1, output_channels[2], 10, 10),
@@ -34,7 +174,16 @@ class BasicModel(torch.nn.Module):
         where out_features[0] should have the shape:
             shape(-1, output_channels[0], 38, 38),
         """
-        out_features = []
+        # Initiate the list containing the output
+        out_features = [None]*6
+        # Compute the output
+        out_features[0] = self.first(x)
+        out_features[1] = self.second(out_features[0])
+        out_features[2] = self.second(out_features[1])
+        out_features[3] = self.second(out_features[2])
+        out_features[4] = self.second(out_features[3])
+        out_features[5] = self.second(out_features[4])
+
         for idx, feature in enumerate(out_features):
             expected_shape = (out_channel, feature_map_size, feature_map_size)
             assert feature.shape[1:] == expected_shape, \
