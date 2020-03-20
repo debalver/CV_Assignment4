@@ -52,8 +52,19 @@ class BasicModel(torch.nn.Module):
                 padding=1
             ),
             nn.ReLU(),
+            # Start of attemp to reach 85% 
             nn.Conv2d(
                 in_channels=64,
+                out_channels=128,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ), 
+            nn.ReLU(),
+            # End of attempt 
+            # Don't forget to modify in next conv in_channels=64 
+            nn.Conv2d(
+                in_channels=128,
                 out_channels=output_channels[0],
                 kernel_size=3,
                 stride=2,
@@ -132,6 +143,16 @@ class BasicModel(torch.nn.Module):
                 padding=1
             ),
             nn.ReLU(),
+            # Start of attempt 
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=128,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+            # End of attempt 
             nn.Conv2d(
                 in_channels=128,
                 out_channels=output_channels[4],
@@ -151,6 +172,16 @@ class BasicModel(torch.nn.Module):
                 stride=1,
                 padding=1
             ),
+            # Start of attempt 
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=128,
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            # End of attempt
             nn.ReLU(),
             nn.Conv2d(
                 in_channels=128,
