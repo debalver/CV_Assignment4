@@ -61,10 +61,18 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ), 
             nn.ReLU(),
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=256,
+                kernel_size=5,
+                stride=1,
+                padding=2
+            ), 
+            nn.ReLU(),
             # End of attempt 
             # Don't forget to modify in next conv in_channels=64 
             nn.Conv2d(
-                in_channels=128,
+                in_channels=256,
                 out_channels=output_channels[0],
                 kernel_size=5,
                 stride=2,
@@ -83,6 +91,16 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ),
             nn.ReLU(),
+            # One more convolution 
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=128,
+                kernel_size=5,
+                stride=1,
+                padding=2
+            ),
+            nn.ReLU(),
+            # End of addition 
             nn.Conv2d(
                 in_channels=128,
                 out_channels=output_channels[1],
@@ -102,7 +120,7 @@ class BasicModel(torch.nn.Module):
                 stride=1,
                 padding=2
             ),
-            nn.ReLU(),
+            nn.ReLU(), 
             nn.Conv2d(
                 in_channels=256,
                 out_channels=output_channels[2],
@@ -143,16 +161,6 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ),
             nn.ReLU(),
-            # Start of attempt 
-            nn.Conv2d(
-                in_channels=128,
-                out_channels=128,
-                kernel_size=5,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            # End of attempt 
             nn.Conv2d(
                 in_channels=128,
                 out_channels=output_channels[4],
@@ -176,6 +184,14 @@ class BasicModel(torch.nn.Module):
             nn.ReLU(),
             nn.Conv2d(
                 in_channels=128,
+                out_channels=256,
+                kernel_size=5,
+                stride=1,
+                padding=2
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=256,
                 out_channels=128,
                 kernel_size=5,
                 stride=1,
