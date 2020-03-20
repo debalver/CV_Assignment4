@@ -178,23 +178,11 @@ class BasicModel(torch.nn.Module):
         out_features = [None]*6
         # Compute the output
         out_features[0] = self.first(x)
-        print("*** Module 1 passed ***")
-        print(out_features[0].shape)
         out_features[1] = self.second(out_features[0])
-        print("*** Module 2 passed ***")
-        print(out_features[1].shape)
         out_features[2] = self.third(out_features[1])
-        print("*** Module 3 passed ***")
-        print(out_features[2].shape)
         out_features[3] = self.fourth(out_features[2])
-        print("*** Module 4 passed ***")
-        print(out_features[3].shape)
         out_features[4] = self.fifth(out_features[3])
-        print("*** Module 5 passed ***")
-        print(out_features[4].shape)
         out_features[5] = self.sixth(out_features[4])
-        print("*** Module 6 passed ***")
-        print(out_features[5].shape)
         # Some testing 
         for idx, feature in enumerate(out_features):
             expected_shape = (self.output_channels[idx], self.output_feature_size[idx], self.output_feature_size[idx])
